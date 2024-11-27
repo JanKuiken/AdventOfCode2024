@@ -1,0 +1,11 @@
+# don't add the input files
+input*.txt
+*input*.txt
+
+# don't add cpp executables
+a.out
+*/a.out
+
+answers.txt
+__pycache__
+
