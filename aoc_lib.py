@@ -108,6 +108,11 @@ def simple_newton_zero_finding(f, start_x, epsilon = 0.001, dx=0.001):
         dy = (f(x+dx) - f(x)) / dx
         x  = x - y / dy
 
+def sign(a):
+    if a < 0: return -1
+    if a > 0: return 1
+    return 0
+
 # Added first for 2023-day-25, trying to keep it general... but added data member...
 #class Graph():
 #

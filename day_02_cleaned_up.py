@@ -6,11 +6,6 @@ import aoc_lib as aoc
 
 lines = aoc.lines_from_file("input_02.txt")
 
-def sign(a):
-    if a < 0: return -1
-    if a > 0: return 1
-    return 0
-
 line_levels = []
 for line in lines:
     levels = [int(i) for i in line.split()]
@@ -19,7 +14,9 @@ for line in lines:
 def check_levels_org(levels):
     steps = [levels[i+1]-levels[i] for i in range(len(levels)-1)]
     for step in steps:
-        if abs(step) > 3 or sign(step) != sign(steps[0]) or sign(step) == 0:
+        if    abs(step) > 3                          \
+           or aoc.sign(step) != aoc.sign(steps[0])   \
+           or aoc.sign(step) == 0:
             return False
     return True
 
