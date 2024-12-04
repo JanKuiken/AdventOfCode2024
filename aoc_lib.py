@@ -113,6 +113,52 @@ def sign(a):
     if a > 0: return 1
     return 0
 
+
+# we might gonna use this class more than once, if so, we move this class
+# to the aoc_lib.py ( don't know why i used namedtuples in the previous year
+# probably because i didn't like to write classes in Python...)
+
+class TablePoint:
+    """ A minimal class with row,col integers for indexing a table
+    operators +,- and *(int) are implemented
+    """
+    # class variables
+    min_row = 0
+    max_row = 100
+    min_col = 0
+    max_col = 100
+    
+    def __init__(self, row, col):
+        self.row = row
+        self.col = col
+
+    def isInbounds(self):
+        return     self.row >= TablePoint.min_row \
+               and self.row <  TablePoint.max_row \
+               and self.col >= TablePoint.min_col \
+               and self.col <  TablePoint.max_col \
+               
+    def __repr__(self):
+        str_inbounds = ''
+        if not self.isInbounds():
+            str_inbounds = ' (out of bounds)'
+        return 'MatrixPoint[ row:' + str(self.row) + ', col:' + str(self.col) + ' ]' + str_inbounds
+
+    def __add__(self, other):
+        assert isinstance(other, TablePoint), 'Oops, expected a MatrixPoint'
+        return TablePoint(self.row + other.row, self.col + other.col)
+
+    def __sub__(self, other):
+        assert isinstance(other, TablePoint), 'Oops, expected a MatrixPoint'
+        return TablePoint(self.row - other.row, self.col - other.col)
+
+    def __mul__(self, other):
+        assert isinstance(other, int), 'Oops, expected an int'
+        return TablePoint(self.row * other, self.col * other)
+
+
+
+
 # Added first for 2023-day-25, trying to keep it general... but added data member...
 #class Graph():
 #
