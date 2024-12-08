@@ -156,7 +156,12 @@ class TablePoint:
         assert isinstance(other, int), 'Oops, expected an int'
         return TablePoint(self.row * other, self.col * other)
 
+    def __eq__(self, other):
+        assert isinstance(other, TablePoint), 'Oops, expected a MatrixPoint'
+        return self.row == other.row and self.col == other.col
 
+    def __hash__(self):
+        return hash((self.row, self.col))
 
 
 # Added first for 2023-day-25, trying to keep it general... but added data member...
