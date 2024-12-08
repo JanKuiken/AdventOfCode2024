@@ -39,43 +39,38 @@ for row in range(n_rows):
         if matrix[row][col] in ascii_letters + digits:
             frequencies[matrix[row][col]].append(aoc.TablePoint(row,col))
 
-antinodes = set()
+antinodes_part_1 = set()
+antinodes_part_2 = set()
+
 for frequency in frequencies.keys():
     locations = frequencies[frequency]
     for combo in combinations(locations,2):
-        for antenna_1, antenna_2 in permutations(combo):
+        for antenna_1, antenna_2 in permutations(combo):            
             delta = antenna_2 - antenna_1
+            # for part 1
             antinode = antenna_2 + delta
             if antinode.isInbounds():
-                antinodes.add(antinode)
+                antinodes_part_1.add(antinode)
+            # for part 2
+            antinode = antenna_2
+            while antinode.isInbounds():
+                antinodes_part_2.add(antinode)
+                antinode = antinode + delta
 
 # check what we have done
-for antidode in antinodes:
+for antidode in antinodes_part_2:
     matrix[antidode.row][antidode.col] = '#'
-aoc.print_matrix(matrix)
-
 count = 0
 for row in range(n_rows):
     for col in range(n_cols):
         if matrix[row][col] == '#':
             count += 1
+aoc.print_matrix(matrix)
 print('count : ', count)
 
-print("Answer part 1 : ", len(antinodes))
-
+print("Answer part 1 : ", len(antinodes_part_1))
 
 # === Part 2
 
-antinodes = set()
-for frequency in frequencies.keys():
-    locations = frequencies[frequency]
-    for combo in combinations(locations,2):
-        for antenna_1, antenna_2 in permutations(combo):
-            delta = antenna_2 - antenna_1
-            antinode = antenna_2
-            while antinode.isInbounds():
-                antinodes.add(antinode)
-                antinode = antinode + delta
-
-print("Answer part 2 : ", len(antinodes))
+print("Answer part 2 : ", len(antinodes_part_2))
 
