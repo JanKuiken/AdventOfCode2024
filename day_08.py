@@ -49,9 +49,9 @@ for frequency in frequencies.keys():
             if antinode.isInbounds():
                 antinodes.add(antinode)
 
+# check what we have done
 for antidode in antinodes:
     matrix[antidode.row][antidode.col] = '#'
-
 aoc.print_matrix(matrix)
 
 count = 0
@@ -72,29 +72,10 @@ for frequency in frequencies.keys():
     for combo in combinations(locations,2):
         for antenna_1, antenna_2 in permutations(combo):
             delta = antenna_2 - antenna_1
-            for i in range(50):
-                antinode = antenna_2 + delta * i
-                if antinode.isInbounds():
-                    antinodes.add(antinode)
-
-print("Answer part 2 : ", len(antinodes))
-
-
-antinodes = set()
-for frequency in frequencies.keys():
-    locations = frequencies[frequency]
-    for combo in combinations(locations,2):
-        for antenna_1, antenna_2 in permutations(combo):
-            delta = antenna_2 - antenna_1
-            antinode = antenna_2 + delta
+            antinode = antenna_2
             while antinode.isInbounds():
                 antinodes.add(antinode)
                 antinode = antinode + delta
 
-print("Answer part 2b : ", len(antinodes))
-
-
-
-
-
+print("Answer part 2 : ", len(antinodes))
 
