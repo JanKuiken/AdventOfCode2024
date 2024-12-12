@@ -142,7 +142,7 @@ class TablePoint:
         str_inbounds = ''
         if not self.isInbounds():
             str_inbounds = ' (out of bounds)'
-        return 'MatrixPoint[ row:' + str(self.row) + ', col:' + str(self.col) + ' ]' + str_inbounds
+        return 'TablePoint(' + str(self.row) + ', ' + str(self.col) + ')' + str_inbounds
 
     def __add__(self, other):
         assert isinstance(other, TablePoint), 'Oops, expected a MatrixPoint'
@@ -162,6 +162,27 @@ class TablePoint:
 
     def __hash__(self):
         return hash((self.row, self.col))
+
+    def neighbours(self):
+        result = []
+        for row in range(self.row - 1, self.row + 2):
+            for col in range(self.col - 1, self.col + 2):
+                tp = TablePoint(row, col)
+                if tp.isInbounds():
+                    result.append(tp)
+        return result
+
+    def cartesian_neighbours(self):
+        result = []
+        tp1 = TablePoint(self.row -1, self.col)
+        tp2 = TablePoint(self.row +1, self.col)
+        tp3 = TablePoint(self.row, self.col -1)
+        tp4 = TablePoint(self.row, self.col +1)
+        if tp1.isInbounds(): result.append(tp1)
+        if tp2.isInbounds(): result.append(tp2)
+        if tp3.isInbounds(): result.append(tp3)
+        if tp4.isInbounds(): result.append(tp4)
+        return result
 
 
 # Added first for 2023-day-25, trying to keep it general... but added data member...
