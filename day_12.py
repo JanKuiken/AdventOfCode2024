@@ -30,15 +30,13 @@ aoc.TablePoint.max_col = n_cols
 # we store the fences in a defauldict, key=location, values 'n' and/or 's'....
 fences = defaultdict(str)
 
-# matrices for fences to the north, east, south and west of each matrix cell
-
 # set outside perimeter fences
 for col in range(n_cols) : fences[aoc.TablePoint(0,col)]        += 'n'
 for col in range(n_cols) : fences[aoc.TablePoint(n_rows-1,col)] += 's'
 for row in range(n_rows) : fences[aoc.TablePoint(row,0)]        += 'w'
 for row in range(n_rows) : fences[aoc.TablePoint(row,n_cols-1)] += 'e'
 
-# set up fences between different gardens (btw double internal fences, but we don't care)
+# set up fences between different gardens for each table cell
 for row in range(n_rows):
     for col in range(n_cols):
         tp = aoc.TablePoint(row,col)
@@ -50,7 +48,8 @@ for row in range(n_rows):
                 if delta.col == -1 : fences[tp] += 'w'
                 if delta.col ==  1 : fences[tp] += 'e'
 
-# recursive function to find all cells of a garden
+# recursive function to find all cells of a garden. Returns a set of table cells
+# First parameter is a TablePoint, second must be an empty set
 def find_whole_garden(tp, areas):
     areas.add(tp)
     for neighbour in tp.cartesian_neighbours():
@@ -70,10 +69,12 @@ for row in range(n_rows):
         
             garden = find_whole_garden(tp, set())
             been_there_done_that.update(garden)
+
             # for part 1            
             n_fences = sum([len(fences[tp2]) for tp2 in garden])
             price = len(garden) * n_fences
             total_price += price            
+
             # for part 2
             double_count = 0
             for tp2 in garden:
@@ -89,7 +90,6 @@ for row in range(n_rows):
             
             #print(tp, matrix[tp.row][tp.col], len(garden), n_fences, price, reduced_price)
            
-
 print("Answer part 1 : ", total_price)
 
 # === Part 2
