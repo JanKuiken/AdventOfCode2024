@@ -6,13 +6,14 @@ import aoc_lib as aoc
 from collections import defaultdict, deque
 from copy import deepcopy
 
-saving_picoseconds = 100
+saving_picoseconds_part_1 = 100
+saving_picoseconds_part_2 = 100
 matrix = aoc.matrix_from_file("input_20.txt")
-
 
 # for testing
 if False:
-    saving_picoseconds = 12    # should result in 8, last six lines in example description table
+    saving_picoseconds_part_1 = 12    # should result in 8, last six lines in example description table
+    saving_picoseconds_part_2 = 66    # should result in 67, last six lines in example description table
     lines = """###############
 #...#...#.....#
 #.#.#.#.#.###.#
@@ -45,6 +46,8 @@ for row in range(n_rows):
     for col in range(n_cols):
         if matrix[row][col] == 'S': start = aoc.TablePoint(row,col)
         if matrix[row][col] == 'E': end   = aoc.TablePoint(row,col)
+print('start', start)
+print('end', end)
 
 #create a graph and determine start and end point
 def create_graph():
@@ -82,13 +85,6 @@ bfs(graph, start, start_to_end)
 bfs(graph, end,   end_to_start)
 initial_result = start_to_end[end.row][end.col]
 
-# print(start)
-# print(end)
-# print(start_to_end[start.row][start.col])
-# print(start_to_end[end.row][end.col])
-# print(end_to_start[start.row][start.col])
-# print(end_to_start[end.row][end.col])
-
 def cheat_result(row,col):
     return   2 \
            + min( [ start_to_end[row+1][col],
@@ -101,15 +97,13 @@ def cheat_result(row,col):
                     end_to_start[row][col-1] ] ) 
 
 print('initial_result', initial_result)
-#print('====', cheat_result(8,8))
 
 results = {}
-
 for row in range(1, n_rows-1):
     for col in range(1, n_cols-1):
         if matrix[row][col] == '#':
             r = cheat_result(row,col)
-            if r <= initial_result - saving_picoseconds:
+            if r <= initial_result - saving_picoseconds_part_1:
                 results[(row,col)] = r
 
 print("Answer part 1 : ", len(results))
@@ -117,6 +111,38 @@ print("Answer part 1 : ", len(results))
 # === Part 2
 
 # hmm,.....
+#aoc.print_matrix(original_matrix)
+# - cheats start with a '#'
+# - cheats end with a '.'
+# - are at max length 20 (manhatan distance)
+# - start and endpoint define a cheat, other equivalent 
+#     routes do not count, they are 'the same cheat'
+# - there are no muliple cheats
 
-print("Answer part 2 : ", )
+def distance(row1, col1, row2, col2):
+    return abs(row1 - row2) + abs(col1 - col2)
 
+# for conviniece (we dont have to check for 'S' and 'E')
+matrix[start.row][start.col] = '.'
+matrix[end.row][end.col] = '.'
+
+def cheat_result_2(row1, col1, row2, col2):
+    return start_to_end[row1][col1] + end_to_start[row2][col2] 
+
+# we need an aweful lots of idents....
+results = {}
+for row1 in range(1, n_rows-1):
+    for col1 in range(1, n_cols-1):
+        if matrix[row1][col1] == '.':
+            for row2 in range(1, n_rows-1):
+                for col2 in range(1, n_cols-1):
+                    if matrix[row2][col2] == '.':
+                        dist = distance(row1, col1, row2, col2)
+                        if dist <= 20:
+                            r = cheat_result_2(row1, col1, row2, col2) + dist 
+                            if r <= initial_result - saving_picoseconds_part_2:
+                                results[(row1, col1, row2, col2, dist)] = r
+
+print('saving_picoseconds_part_2',saving_picoseconds_part_2)
+
+print("Answer part 2 : ", len(results))
