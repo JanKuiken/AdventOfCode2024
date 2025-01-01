@@ -1,0 +1,344 @@
+
+                                                                                                    
+{'a': 'jsn', 'b': 'dvb', 'fn': <function AND at 0x7f0167dc8860>, 'out': 'ftc'}      jsn dvb AND => ftc
+{'a': 'dvb', 'b': 'jsn', 'fn': <function XOR at 0x7f0167dc96c0>, 'out': 'z35'}      dvb jsn XOR => z35
+{'a': 'ftc', 'b': 'fsq', 'fn': <function OR at 0x7f0167dc8b80>, 'out': 'bwc'}       ftc fsq  OR => bwc
+
+* {'a': 'sst', 'b': 'vcf', 'fn': <function OR at 0x7f0167dc8b80>, 'out': 'fgb'}
+*  {'a': 'qjn', 'b': 'fhg', 'fn': <function OR at 0x7f0167dc8b80>, 'out': 'jfb'}   
+
+vcf, z10, z17, fhg, dvb, fsq, z39, tnc
+
+dvb,fhg,fsq,tnc,vcf,z10,z17,z39
+
+
+jsn dvb AND => ftc
+dvb jsn XOR => z35
+ftc fsq  OR => bwc
+
+ x00                                                                                                
+ y00 XOR   z00                                                                                      
+                                                                                                    
+ y00                                                                                                
+ x00 AND   kvj                                                   ok                                   
+                                                                                                    
+                                                                                                    
+ y01                 bhq                                                                            
+ x01 XOR   bhq       kvj XOR   z01                                                                  
+                                                                                                    
+ y01                 kvj                 rtg                                                        
+ x01 AND   rtg       bhq AND   wkc       wkc  OR   htw           ok                                   
+                                                                                                    
+                                                                                                    
+ y02                 mpj                                                                            
+ x02 XOR   mpj       htw XOR   z02                                                                  
+                                                                                                    
+ x02                 htw                 dmq                                                        
+ y02 AND   dmq       mpj AND   sdk       sdk  OR   gwf           ok                                   
+                                                                                                    
+                                                                                                    
+ y03                 nbw                                                                            
+ x03 XOR   nbw       gwf XOR   z03                                                                  
+                                                                                                    
+ x03                 nbw                 psr                                                        
+ y03 AND   psr       gwf AND   btm       btm  OR   hct           ok                                   
+                                                                                                    
+                                                                                                    
+ x04                 cnr                                                                            
+ y04 XOR   cnr       hct XOR   z04                                                                  
+                                                                                                    
+ y04                 cnr                 ggt                                                        
+ x04 AND   ggt       hct AND   nbp       nbp  OR   ffv          ok                                    
+                                                                                                    
+                                                                                                    
+ y05                 pmh                                                                            
+ x05 XOR   pmh       ffv XOR   z05                                                                  
+                                                                                                    
+ y05                 ffv                 brb                                                        
+ x05 AND   wnc       pmh AND   brb       wnc  OR   sfm          ok                                     
+                                                                                                    
+                                                                                                    
+ x06                 sfm                                                                            
+ y06 XOR   wsn       wsn XOR   z06                                                                  
+                                                                                                    
+ x06                 wsn                 kbv                                                        
+ y06 AND   kbv       sfm AND   kjs       kjs  OR   jqv          ok                                    
+                                                                                                    
+                                                                                                    
+ x07                 jqv                                                                            
+ y07 XOR   nvh       nvh XOR   z07                                                                  
+                                                                                                    
+ y07                 nvh                 ghp                                                        
+ x07 AND   ghp       jqv AND   tfs       tfs  OR   cqn          ok                                    
+                                                                                                    
+                                                                                                    
+ y08                 gmw                                                                            
+ x08 XOR   gmw       cqn XOR   z08                                                                  
+                                                                                                    
+ x08                 gmw                 qwf                                                        
+ y08 AND   qwf       cqn AND   jfn       jfn  OR   jgj          ok                                    
+                                                                                                    
+                                                                                                    
+ y09                 jgj                                                                            
+ x09 XOR   gff       gff XOR   z09                                                                  
+                                                                                                    
+ x09                 jgj                 kwg                                                        
+ y09 AND   kwg       gff AND   fwc       fwc  OR   skm          ok                                     
+                                                                                                    
+                                                                                                    
+ x10                 kck                   OR missing, z01 not ok                                                         
+ y10 XOR   kck       skm XOR   vcf*z10         ==========                                                          
+                                                                                                    
+ x10                 skm                                                                            
+ y10 AND   z10*vcf   kck AND   sst          vcf,sst OR => fgb                                                        
+                                                                                                    
+                                                                                                    
+ x11                 fgb                                                                            
+ y11 XOR   bmd       bmd XOR   z11                                                                  
+                                                                                                    
+ x11                 bmd                 jgv                                                        
+ y11 AND   gvd       fgb AND   jgv       gvd  OR   gvj         ok                                      
+                                                                                                    
+                                                                                                    
+ x12                 qbw                                                                            
+ y12 XOR   qbw       gvj XOR   z12                                                                  
+                                                                                                    
+ x12                 gvj                 kdb                                                        
+ y12 AND   kdb       qbw AND   brq       brq  OR   bgh        ok                                      
+                                                                                                    
+                                                                                                    
+ y13                 bgh                                                                            
+ x13 XOR   ctc       ctc XOR   z13                                                                  
+                                                                                                    
+ x13                 ctc                 jmr                                                        
+ y13 AND   sdf       bgh AND   jmr       sdf  OR   wgc         ok                                      
+                                                                                                    
+                                                                                                    
+ x14                 pvs                                                                            
+ y14 XOR   pvs       wgc XOR   z14                                                                  
+                                                                                                    
+ x14                 pvs                 dtj                                                        
+ y14 AND   dtj       wgc AND   mjr       mjr  OR   rhw                                              
+                                                              ok                                      
+                                                                                                    
+ x15                 mng                                                                            
+ y15 XOR   mng       rhw XOR   z15                                                                  
+                                                                                                    
+ y15                 mng                 nbg                                                        
+ x15 AND   pnm       rhw AND   nbg       pnm  OR   rfv         ok                                     
+                                                                                                    
+                                                                                                    
+ y16                 dcj                                                                            
+ x16 XOR   dcj       rfv XOR   z16                                                                  
+                                                                                                    
+ y16                 dcj                 dpc                                                        
+ x16 AND   pwj       rfv AND   dpc       pwj  OR   jjf         ok                                     
+                                                                                                    
+                                                                                                    
+ x17                 jjf                 OR missing, z17 not ok                                                      
+ y17 XOR   qjg       qjg XOR   fhg*z17   =======================                                                                
+                                                                                                    
+ x17                 qjg                                                                            
+ y17 AND   qjn       jjf AND   z17*fhg        fhg qjn OR jfb                                                          
+                                                                                                    
+                                                                                                    
+ x18                 jfb                                                                            
+ y18 XOR   vgw       vgw XOR   z18                                                                  
+                                                                                                    
+ x18                 vgw                 mpf                                                        
+ y18 AND   mpf       jfb AND   jsh       jsh  OR   nwg         ok                                     
+                                                                                                    
+                                                                                                    
+ x19                 pjs                                                                            
+ y19 XOR   pjs       nwg XOR   z19                                                                  
+                                                                                                    
+ y19                 pjs                 ccq                                                        
+ x19 AND   ccq       nwg AND   jfs       jfs  OR   trb         ok                                     
+                                                                                                    
+                                                                                                    
+ x20                 shw                                                                            
+ y20 XOR   shw       trb XOR   z20                                                                  
+                                                                                                    
+ y20                 trb                 mkd                                                        
+ x20 AND   mkd       shw AND   nrr       nrr  OR   tvq        ok                                      
+                                                                                                    
+                                                                                                    
+ y21                 ddd                                                                            
+ x21 XOR   ddd       tvq XOR   z21                                                                  
+                                                                                                    
+ x21                 tvq                 fcj                                                        
+ y21 AND   drw       ddd AND   fcj       drw  OR   pgc         ok                                     
+                                                                                                    
+                                                                                                    
+ x22                 pgc                                                                            
+ y22 XOR   tfj       tfj XOR   z22                                                                  
+                                                                                                    
+ x22                 pgc                 btr                                                        
+ y22 AND   nnb       tfj AND   btr       nnb  OR   vks         ok                                     
+                                                                                                    
+                                                                                                    
+ y23                 vks                                                                            
+ x23 XOR   vwg       vwg XOR   z23                                                                  
+                                                                                                    
+ y23                 vks                 jfd                                                        
+ x23 AND   fjp       vwg AND   jfd       fjp  OR   tcj         ok                                     
+                                                                                                    
+                                                                                                    
+ y24                 tcj                                                                            
+ x24 XOR   swd       swd XOR   z24                                                                  
+                                                                                                    
+ y24                 tcj                 hfm                                                        
+ x24 AND   hfm       swd AND   wwm       wwm  OR   kcd         ok                                     
+                                                                                                    
+                                                                                                    
+ x25                 kcd                                                                            
+ y25 XOR   vnt       vnt XOR   z25                                                                  
+                                                                                                    
+ y25                 vnt                 vdd                                                        
+ x25 AND   dwh       kcd AND   vdd       dwh  OR   ffw          ok                                    
+                                                                                                    
+                                                                                                    
+ x26                 ffw                                                                            
+ y26 XOR   snd       snd XOR   z26                                                                  
+                                                                                                    
+ y26                 ffw                 msw                                                        
+ x26 AND   jsr       snd AND   msw       jsr  OR   wgr          ok                                    
+                                                                                                    
+                                                                                                    
+ x27                 qbg                                                                            
+ y27 XOR   qbg       wgr XOR   z27                                                                  
+                                                                                                    
+ y27                 wgr                 qqr                                                        
+ x27 AND   qqr       qbg AND   dhp       dhp  OR   kqp         ok                                     
+                                                                                                    
+                                                                                                    
+ y28                 cws                                                                            
+ x28 XOR   cws       kqp XOR   z28                                                                  
+                                                                                                    
+ y28                 kqp                 tsd                                                        
+ x28 AND   tsd       cws AND   wfw       wfw  OR   dqp         ok                                     
+                                                                                                    
+                                                                                                    
+ x29                 qkw                                                                            
+ y29 XOR   qkw       dqp XOR   z29                                                                  
+                                                                                                    
+ y29                 dqp                 dpr                                                        
+ x29 AND   jbf       qkw AND   dpr       jbf  OR   ctm         ok                                     
+                                                                                                    
+                                                                                                    
+ x30                 ctm                                                                            
+ y30 XOR   hqf       hqf XOR   z30                                                                  
+                                                                                                    
+ y30                 ctm                 ttk                                                        
+ x30 AND   ttk       hqf AND   dmw       dmw  OR   ghf         ok                                     
+                                                                                                    
+                                                                                                    
+ y31                 ghf                                                                            
+ x31 XOR   crj       crj XOR   z31                                                                  
+                                                                                                    
+ y31                 crj                 vqt                                                        
+ x31 AND   vqt       ghf AND   mns       mns  OR   bcj         ok                                     
+                                                                                                    
+                                                                                                    
+ y32                 krc                                                                            
+ x32 XOR   krc       bcj XOR   z32                                                                  
+                                                                                                    
+ y32                 krc                 rhp                                                        
+ x32 AND   whq       bcj AND   rhp       whq  OR   pfq         ok                                     
+                                                                                                    
+                                                                                                    
+ x33                 pmn                                                                            
+ y33 XOR   pmn       pfq XOR   z33                                                                  
+                                                                                                    
+ y33                 pmn                 dfv                                                        
+ x33 AND   dfv       pfq AND   rnj       rnj  OR   qnv         ok                                     
+                                                                                                    
+                                                                                                    
+ x34                 qnv                                                                            
+ y34 XOR   vbh       vbh XOR   z34                                                                  
+                                                                                                    
+ x34                 qnv                 tgn                                                        
+ y34 AND   bbf       vbh AND   tgn       bbf  OR   jsn        ok                                      
+                                                                                                    
+
+jsn dvb AND => ftc
+dvb jsn XOR => z35
+ftc fsq  OR => bwc
+
+                                                                                                    
+ y35                                                                                                
+ x35 XOR   fsq*dvb       dvb jsn XOR => z35                                                                                  
+                                                                                                    
+ y35                                                                                                
+ x35 AND   dvb*fsq       jsn dvb AND => ftc   ftc fsq OR =>bwc                                                          
+                                                                                                    
+ x36                 ncq                                                                            
+ y36 XOR   ncq       bwc XOR   z36                                                                  
+                                                                                                    
+ y36                 bwc                 psp                                                        
+ x36 AND   kss       ncq AND   psp       kss  OR   mdv          ok                                    
+                                                                                                    
+                                                                                                    
+ x37                 rhj                                                                            
+ y37 XOR   rhj       mdv XOR   z37                                                                  
+                                                                                                    
+ y37                 rhj                 jjb                                                        
+ x37 AND   jjb       mdv AND   bfn       bfn  OR   hkj                                              
+                                                                                                    
+                                                                                                    
+ x38                 hkj                                                                            
+ y38 XOR   rsn       rsn XOR   z38                                                                  
+                                                                                                    
+ y38                 rsn                 gqm                                                        
+ x38 AND   gqm       hkj AND   kfp       kfp  OR   mnd                                              
+                                                                                                    
+                                                                                                    
+ y39                 kmh                                                                            
+ x39 XOR   kmh       mnd XOR   tnc*z39                                                                  
+                                                                                                    
+ y39                 kmh                 rvd                                                        
+ x39 AND   rvd       mnd AND   wrj       wrj  OR   z39*tnc
+                                                                                                    
+                                                                                                    
+ x40                 rtf                                                                            
+ y40 XOR   rtf       tnc XOR   z40                                                                  
+                                                                                                    
+ y40                 rtf                 gtv                                                        
+ x40 AND   jmc       tnc AND   gtv       jmc  OR   hvk                                              
+                                                                                                    
+                                                                                                    
+ y41                 hvk                                                                            
+ x41 XOR   hpr       hpr XOR   z41                                                                  
+                                                                                                    
+ y41                 hvk                 ngm                                                        
+ x41 AND   mdh       hpr AND   ngm       mdh  OR   wps                                              
+                                                                                                    
+                                                                                                    
+ x42                 wps                                                                            
+ y42 XOR   rnc       rnc XOR   z42                                                                  
+                                                                                                    
+ y42                 rnc                 hsp                                                        
+ x42 AND   rft       wps AND   hsp       rft  OR   hmg                                              
+                                                                                                    
+                                                                                                    
+ x43                 hmg                                                                            
+ y43 XOR   jjd       jjd XOR   z43                                                                  
+                                                                                                    
+ x43                 hmg                 nfp                                                        
+ y43 AND   nfp       jjd AND   wfc       wfc  OR   knf                                              
+                                                                                                    
+                                                                                                    
+ x44                 knf                                                                            
+ y44 XOR   qgg       qgg XOR   z44                                                                  
+                                                                                                    
+ y44                 knf                 fvb                                                        
+ x44 AND   hqb       qgg AND   fvb       hqb  OR   z45                                              
+                                                                                                    
+                                                                                                    
+{'a': 'jsn', 'b': 'dvb', 'fn': <function AND at 0x7f0167dc8860>, 'out': 'ftc'}
+{'a': 'dvb', 'b': 'jsn', 'fn': <function XOR at 0x7f0167dc96c0>, 'out': 'z35'}
+{'a': 'qjn', 'b': 'fhg', 'fn': <function OR at 0x7f0167dc8b80>, 'out': 'jfb'}
+{'a': 'ftc', 'b': 'fsq', 'fn': <function OR at 0x7f0167dc8b80>, 'out': 'bwc'}
+{'a': 'sst', 'b': 'vcf', 'fn': <function OR at 0x7f0167dc8b80>, 'out': 'fgb'}
+
+
