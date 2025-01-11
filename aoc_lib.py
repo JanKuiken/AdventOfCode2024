@@ -3,7 +3,7 @@ Some functions that are multiple times used in AoC 2023
 """
 
 import pprint
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 def lines_from_file(file_name):
     """
@@ -113,10 +113,97 @@ def sign(a):
     if a > 0: return 1
     return 0
 
+def dijkstra(graph, source):
+    """
+    i have not used/implemented this alogorithm before, below is the pseudo code 
+    from wikipedia. lets change it into Python for our applications...
+ 
+    source: https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+    
+ 1  function Dijkstra(Graph, source):
+ 2     
+ 3      for each vertex v in Graph.Vertices:
+ 4          dist[v] ← INFINITY
+ 5          prev[v] ← UNDEFINED
+ 6          add v to Q
+ 7      dist[source] ← 0
+ 8     
+ 9      while Q is not empty:
+10          u ← vertex in Q with minimum dist[u]
+11          remove u from Q
+12         
+13          for each neighbor v of u still in Q:
+14              alt ← dist[u] + Graph.Edges(u, v)
+15              if alt < dist[v]:
+16                  dist[v] ← alt
+17                  prev[v] ← u
+18
+19      return dist[], prev[]
+"""
 
-# we might gonna use this class more than once, if so, we move this class
-# to the aoc_lib.py ( don't know why i used namedtuples in the previous year
-# probably because i didn't like to write classes in Python...)
+     # pseudo code : for each vertex v in Graph.Vertices:
+     # pseudo code :     dist[v] ← INFINITY
+     # pseudo code :     prev[v] ← UNDEFINED
+     # pseudo code :     add v to Q
+     # pseudo code : dist[source] ← 0
+
+    vertices = list(graph.keys())
+    
+    dist = { v: float('infinity') for v in vertices }
+    prev = { v: None  for v in vertices }
+    Q = set(vertices)
+
+    dist[source] = 0
+    
+    # pseudo code : while Q is not empty
+
+    while Q:
+    
+        # pseudo code : u ← vertex in Q with minimum dist[u]
+        min_dist = float('infinity')
+        u = None
+        for v in Q:
+            if dist[v] <= min_dist:
+                min_dist = dist[v]
+                u = v
+
+        # pseudo code : remove u from Q
+        Q.remove(u)
+        
+        # pseudo code : for each neighbor v of u still in Q:
+
+        neighbours_of_u = graph[u].keys()
+        neighbours_of_u_in_Q = [neighbour for neighbour in neighbours_of_u if neighbour in Q]
+        for v in neighbours_of_u_in_Q:
+
+            # pseudo code : alt ← dist[u] + Graph.Edges(u, v)
+            # pseudo code : if alt < dist[v]:
+            # pseudo code :     dist[v] ← alt
+            # pseudo code :     prev[v] ← u
+
+            alt = dist[u] + graph[u][v]
+            if alt < dist[v]:
+                dist[v] = alt
+                prev[v] = u
+        
+    # pseudo code : return dist[], prev[]
+    return dist, prev
+
+def test_my_dijkstra_function():
+
+    # graph also from https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+    graph = defaultdict(dict)
+    graph['1'] = {'2':  7, '3':  9, '6': 14         }
+    graph['2'] = {'1':  7, '3': 10, '4': 15         }
+    graph['3'] = {'1':  9, '2': 10, '4': 11, '6': 2 }
+    graph['4'] = {'2': 15, '3': 11, '5':  6         }
+    graph['5'] = {'4':  6, '6':  9                  }
+    graph['6'] = {'1': 14, '3':  2, '5':  9         }
+    for start in graph.keys():
+        dist, prev = dijkstra(graph, start)
+        print('start', start)
+        print('dist', dist)
+        print('prev', prev)
 
 class TablePoint:
     """ A minimal class with row,col integers for indexing a table
