@@ -111,6 +111,8 @@ def cost_of_move(vert1, vert2):
     # first filter as many as possible
     if vert1.point == vert2.point:                                     return -1
     if vert1.direction != vert2.direction:                             return -1
+    if (     vert1.point.row != vert2.point.row 
+         and vert1.point.col != vert2.point.col ) :                    return -1
     if vert1.direction == 'n'  and vert2.point.row >= vert1.point.row: return -1
     if vert1.direction == 's'  and vert2.point.row <= vert1.point.row: return -1
     if vert1.direction == 'e'  and vert2.point.col <= vert1.point.col: return -1
@@ -210,5 +212,40 @@ print("Answer part 1 : ", lowest_score)
 
 # === Part 2
 
-print("Answer part 2 : ", )
+# aoc.pprint(prev)
+
+done = set()
+todo = deque([e for e in ends if dist[e]==lowest_score])
+while todo:
+    vert1 = todo.popleft()
+    if not vert1 in done:
+        done.add(vert1)
+        for vert2 in prev[vert1]:
+            todo.append(vert2)
+            if vert1.point.col == vert2.point.col:
+                dist = abs(vert2.point.row - vert1.point.row)
+                if vert2.point.row < vert1.point.row:
+                    sign = -1
+                else:
+                    sign = 1
+                for i in range(0, dist+1):
+                    matrix[vert1.point.row + i * sign][vert1.point.col] = 'O'
+            else:
+                dist = abs(vert2.point.col - vert1.point.col)
+                if vert2.point.col < vert1.point.col:
+                    sign = -1
+                else:
+                    sign = 1
+                for i in range(0, dist+1):
+                    matrix[vert1.point.row][vert1.point.col + i * sign] = 'O'
+
+aoc.print_matrix(matrix)
+# let's count the 'O's
+count = 0
+for row in range(n_rows):
+    for col in range(n_cols):
+        if matrix[row][col] == 'O':
+            count += 1
+
+print("Answer part 2 : ", count)
 

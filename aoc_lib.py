@@ -150,7 +150,7 @@ def dijkstra(graph, source):
     vertices = list(graph.keys())
     
     dist = { v: float('infinity') for v in vertices }
-    prev = { v: None  for v in vertices }
+    prev = { v: set()  for v in vertices }
     Q = set(vertices)
 
     dist[source] = 0
@@ -182,9 +182,13 @@ def dijkstra(graph, source):
             # pseudo code :     prev[v] ← u
 
             alt = dist[u] + graph[u][v]
-            if alt < dist[v]:
+            if alt <= dist[v]:
+                if alt < dist[v]:
+                    prev[v] = set([u])
+                else:
+                    # alt == dist[v], add a prev instead of replacing it
+                    prev[v].add(u)
                 dist[v] = alt
-                prev[v] = u
         
     # pseudo code : return dist[], prev[]
     return dist, prev
