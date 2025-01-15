@@ -42,14 +42,13 @@ for row in range(n_rows):
 # aoc.pprint(graph)
 
 start_tp = None
-trails_found_set= defaultdict(set)
-trails_found_list= defaultdict(list)
+trails_found_set= set()
+trails_found_list= list()
 
 def find_a_nine(tp):
-    global trails_found
     if matrix[tp.row][tp.col] == 9:
-        trails_found_set[start_tp].add(tp)
-        trails_found_list[start_tp].append(tp)
+        trails_found_set.add((start_tp,tp))
+        trails_found_list.append((start_tp,tp))
         return
     for next_tp in graph[tp]:
         find_a_nine(next_tp)
@@ -57,21 +56,15 @@ def find_a_nine(tp):
 for row in range(n_rows):
     for col in range(n_cols):
         tp = aoc.TablePoint(row,col)
-        start_tp = tp
         if matrix[tp.row][tp.col] == 0:
-            been_there_done_that = []
+            start_tp = tp
             find_a_nine(tp)
 
 # aoc.pprint(trails_found)
-nines_found = sum(map(len, trails_found_set.values()))
 
-print("Answer part 1 : ", nines_found)
+print("Answer part 1 : ", len(trails_found_set))
 
 # === Part 2
 
-nines_found = sum(map(len, trails_found_list.values()))
-
-print("Answer part 2 : ", nines_found)
-
-
+print("Answer part 2 : ", len(trails_found_list))
 
