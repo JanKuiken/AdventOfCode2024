@@ -32,12 +32,10 @@ aoc.TablePoint.max_row = n_rows
 aoc.TablePoint.max_col = n_cols
 
 graph = defaultdict(list)
-for row in range(n_rows):
-    for col in range(n_cols):
-        tp = aoc.TablePoint(row,col)
-        for neighbour in tp.cartesian_neighbours():
-            if matrix[neighbour.row][neighbour.col] == matrix[tp.row][tp.col] + 1:
-                graph[tp].append(neighbour)
+for tp in aoc.TablePoint.iterate():
+    for neighbour in tp.cartesian_neighbours():
+        if matrix[neighbour.row][neighbour.col] == matrix[tp.row][tp.col] + 1:
+            graph[tp].append(neighbour)
 
 # aoc.pprint(graph)
 
@@ -53,12 +51,10 @@ def find_a_nine(tp):
     for next_tp in graph[tp]:
         find_a_nine(next_tp)
 
-for row in range(n_rows):
-    for col in range(n_cols):
-        tp = aoc.TablePoint(row,col)
-        if matrix[tp.row][tp.col] == 0:
-            start_tp = tp
-            find_a_nine(tp)
+for tp in aoc.TablePoint.iterate():
+    if matrix[tp.row][tp.col] == 0:
+        start_tp = tp
+        find_a_nine(tp)
 
 # aoc.pprint(trails_found)
 
