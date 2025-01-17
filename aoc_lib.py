@@ -259,7 +259,7 @@ class TablePoint:
         for row in range(self.row - 1, self.row + 2):
             for col in range(self.col - 1, self.col + 2):
                 tp = TablePoint(row, col)
-                if tp.isInbounds():
+                if tp.isInbounds() and tp != self:
                     result.append(tp)
         return result
 
