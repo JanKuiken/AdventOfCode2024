@@ -210,9 +210,12 @@ def test_my_dijkstra_function():
         print('prev', prev)
 
 class TablePoint:
-    """ A minimal class with row,col integers for indexing a table
-    operators +,- and *(int) are implemented
-    """
+    """ A minimal class with row,col integers for indexing a table or matrix.
+Operators +,- and *(int) are implemented
+Size of table or matrix is defined with the class variables (min/max_row/col),
+  so if you have to deal with tables/matrices of different size you cannot use
+  this class usefully.
+"""
     # class variables
     min_row = 0
     max_row = 100
@@ -265,15 +268,17 @@ class TablePoint:
 
     def cartesian_neighbours(self):
         result = []
-        tp1 = TablePoint(self.row -1, self.col)
-        tp2 = TablePoint(self.row +1, self.col)
-        tp3 = TablePoint(self.row, self.col -1)
-        tp4 = TablePoint(self.row, self.col +1)
-        if tp1.isInbounds(): result.append(tp1)
-        if tp2.isInbounds(): result.append(tp2)
-        if tp3.isInbounds(): result.append(tp3)
-        if tp4.isInbounds(): result.append(tp4)
+        for tp in [ TablePoint( self.row -1, self.col    ),
+                    TablePoint( self.row +1, self.col    ),
+                    TablePoint( self.row   , self.col -1 ),
+                    TablePoint( self.row   , self.col +1 ), ] :
+            if tp.isInbounds(): result.append(tp)
         return result
+
+    def iterate():
+        for row in range(TablePoint.min_row, TablePoint.max_row):
+            for col in range(TablePoint.min_col, TablePoint.max_col):
+                yield(TablePoint(row,col))
 
 
 # Added first for 2023-day-25, trying to keep it general... but added data member...
