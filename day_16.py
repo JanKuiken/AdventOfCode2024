@@ -58,20 +58,17 @@ if False:
 #################""".split('\n')
     matrix =  [ [ c for c in line ] for line in lines ]
 
-n_rows = len(matrix)
-n_cols = len(matrix[0])
+aoc.TablePoint.max_row = len(matrix)
+aoc.TablePoint.max_col = len(matrix[0])
 
-aoc.TablePoint.max_row = n_rows
-aoc.TablePoint.max_col = n_cols
-
-aoc.print_matrix(matrix)
+# aoc.print_matrix(matrix)
 
 start = None
 end   = None
-for row in range(n_rows):
-    for col in range(n_cols):
-        if matrix[row][col] == 'S': start = aoc.TablePoint(row,col)
-        if matrix[row][col] == 'E': end   = aoc.TablePoint(row,col)
+for tp in aoc.TablePoint.iterate():
+    if matrix[tp.row][tp.col] == 'S': start = tp
+    if matrix[tp.row][tp.col] == 'E': end   = tp
+
 print('start', start)
 print('end', end)
 
@@ -106,33 +103,21 @@ Vertex = namedtuple('Vertex', 'point direction')
 TURN_COST = 1000
 STEP_COST = 1
 
-def cost_of_move(vert1, vert2):
-    """ Retrun the cost of a move, if the move is not possible return -1"""
-    # first filter as many as possible
-    if vert1.point == vert2.point:                                     return -1
-    if vert1.direction != vert2.direction:                             return -1
-    if (     vert1.point.row != vert2.point.row 
-         and vert1.point.col != vert2.point.col ) :                    return -1
-    if vert1.direction == 'n'  and vert2.point.row >= vert1.point.row: return -1
-    if vert1.direction == 's'  and vert2.point.row <= vert1.point.row: return -1
-    if vert1.direction == 'e'  and vert2.point.col <= vert1.point.col: return -1
-    if vert1.direction == 'w'  and vert2.point.col >= vert1.point.col: return -1
-    if vert1.direction in 'ns' and vert1.point.col != vert2.point.col: return -1 
-    if vert1.direction in 'ew' and vert1.point.row != vert2.point.row: return -1
-    if vert1.direction in 'ns' : dist = abs(vert2.point.row - vert1.point.row)
-    if vert1.direction in 'ew' : dist = abs(vert2.point.col - vert1.point.col)
-    # almost there, we only have to check if we don't encounter a '#' from vert1 to vert2...
-    for i in range(1,dist):
-        tp = vert1.point + directions[vert1.direction] * i
-        if matrix[tp.row][tp.col] == '#':
-            return -1  
-    # we're done
-    return dist * STEP_COST
-
 # create a graph for dijkstra's algorithm
 def create_graph():
 
     graph = defaultdict(dict)
+
+    def add_all_possible_turns(vertex):
+        graph[Vertex(vertex, 'n')][Vertex(vertex, 'e')] = TURN_COST
+        graph[Vertex(vertex, 'n')][Vertex(vertex, 'w')] = TURN_COST
+        graph[Vertex(vertex, 's')][Vertex(vertex, 'e')] = TURN_COST
+        graph[Vertex(vertex, 's')][Vertex(vertex, 'w')] = TURN_COST
+        graph[Vertex(vertex, 'e')][Vertex(vertex, 'n')] = TURN_COST
+        graph[Vertex(vertex, 'e')][Vertex(vertex, 's')] = TURN_COST
+        graph[Vertex(vertex, 'w')][Vertex(vertex, 'n')] = TURN_COST
+        graph[Vertex(vertex, 'w')][Vertex(vertex, 's')] = TURN_COST
+
     
     print('add endpoint in all directions')
     graph[Vertex(end, 'n')] = {}
@@ -140,44 +125,29 @@ def create_graph():
     graph[Vertex(end, 'e')] = {}
     graph[Vertex(end, 'w')] = {}
 
-    print('add start point with all possible turns (don\'t be cheap)')
-    graph[Vertex(start, 'n')][Vertex(start, 'e')] = 1000        
-    graph[Vertex(start, 'n')][Vertex(start, 'w')] = 1000        
-    graph[Vertex(start, 's')][Vertex(start, 'e')] = 1000        
-    graph[Vertex(start, 's')][Vertex(start, 'w')] = 1000        
-    graph[Vertex(start, 'e')][Vertex(start, 'n')] = 1000        
-    graph[Vertex(start, 'e')][Vertex(start, 's')] = 1000        
-    graph[Vertex(start, 'w')][Vertex(start, 'n')] = 1000        
-    graph[Vertex(start, 'w')][Vertex(start, 's')] = 1000        
+    print('add start point')
+    add_all_possible_turns(start)
 
     print('add turns to the graph')
-    for row in range(n_rows):
-        for col in range(n_cols):
-            if matrix[row][col] in '.SE':
-                tp1 = aoc.TablePoint(row,col)
-                dirs = []
-                for tp2 in tp1.cartesian_neighbours():
-                    if matrix[tp2.row][tp2.col] in '.SE':
-                        dirs.append(inv_directions[tp2-tp1])
-                if (   len(dirs) > 2
-                    or (len(dirs) == 2 and dirs[0] + dirs[1] in possible_turns)):
-                    
-                    # just add all possible turns (don't be cheap)
-                    graph[Vertex(tp1, 'n')][Vertex(tp1, 'e')] = 1000        
-                    graph[Vertex(tp1, 'n')][Vertex(tp1, 'w')] = 1000        
-                    graph[Vertex(tp1, 's')][Vertex(tp1, 'e')] = 1000        
-                    graph[Vertex(tp1, 's')][Vertex(tp1, 'w')] = 1000        
-                    graph[Vertex(tp1, 'e')][Vertex(tp1, 'n')] = 1000        
-                    graph[Vertex(tp1, 'e')][Vertex(tp1, 's')] = 1000        
-                    graph[Vertex(tp1, 'w')][Vertex(tp1, 'n')] = 1000        
-                    graph[Vertex(tp1, 'w')][Vertex(tp1, 's')] = 1000
+    for tp1 in aoc.TablePoint.iterate():
+        if matrix[tp1.row][tp1.col] in '.SE':
+           dirs = []   
+           for tp2 in tp1.cartesian_neighbours():
+               if matrix[tp2.row][tp2.col] in '.SE':
+                   dirs.append(inv_directions[tp2-tp1])
+           if (   len(dirs) > 2
+               or (len(dirs) == 2 and dirs[0] + dirs[1] in possible_turns)):
+                
+               # just add all possible turns (don't be cheap)
+               add_all_possible_turns(tp1)
 
     print('add linear moves to the graph')
-    for vert1 in graph.keys():
-        for vert2 in graph.keys():
-            cost = cost_of_move(vert1, vert2)
-            if cost > 0:
-                graph[vert1][vert2] = cost 
+    for tp1 in aoc.TablePoint.iterate():
+        if matrix[tp1.row][tp1.col] in '.SE':
+           for tp2 in tp1.cartesian_neighbours():
+               if matrix[tp2.row][tp2.col] in '.SE':
+                   direction = inv_directions[tp2 - tp1]
+                   graph[Vertex(tp1, direction)][Vertex(tp2, direction)] = STEP_COST
 
     print('that\'s about that, we have a graph')
     return graph
@@ -212,8 +182,7 @@ print("Answer part 1 : ", lowest_score)
 
 # === Part 2
 
-# aoc.pprint(prev)
-
+walked_path = set()
 done = set()
 todo = deque([e for e in ends if dist[e]==lowest_score])
 while todo:
@@ -229,7 +198,7 @@ while todo:
                 else:
                     sign = 1
                 for i in range(0, dist+1):
-                    matrix[vert1.point.row + i * sign][vert1.point.col] = 'O'
+                    walked_path.add((vert1.point.row + i * sign, vert1.point.col))
             else:
                 dist = abs(vert2.point.col - vert1.point.col)
                 if vert2.point.col < vert1.point.col:
@@ -237,15 +206,7 @@ while todo:
                 else:
                     sign = 1
                 for i in range(0, dist+1):
-                    matrix[vert1.point.row][vert1.point.col + i * sign] = 'O'
+                    walked_path.add((vert1.point.row, vert1.point.col + i * sign))
 
-aoc.print_matrix(matrix)
-# let's count the 'O's
-count = 0
-for row in range(n_rows):
-    for col in range(n_cols):
-        if matrix[row][col] == 'O':
-            count += 1
-
-print("Answer part 2 : ", count)
+print("Answer part 2 : ", len(walked_path))
 
