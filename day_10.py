@@ -20,24 +20,19 @@ if False:
 10456732""".split('\n')
     matrix = [ [ c for c in line ] for line in lines ]
 
-n_rows = len(matrix)
-n_cols = len(matrix[0])
+aoc.TablePoint.max_row = len(matrix)
+aoc.TablePoint.max_col = len(matrix[0])
 
-# cast matrix to ints
-for row in range(n_rows):
-    for col in range(n_cols):
-        matrix[row][col] = int(matrix[row][col])
+# change matrix chars to ints
+for tp in aoc.TablePoint.iterate():
+    matrix[tp.row][tp.col] = int(matrix[tp.row][tp.col])
 
-aoc.TablePoint.max_row = n_rows
-aoc.TablePoint.max_col = n_cols
-
+# make a graph of possible moves
 graph = defaultdict(list)
 for tp in aoc.TablePoint.iterate():
     for neighbour in tp.cartesian_neighbours():
         if matrix[neighbour.row][neighbour.col] == matrix[tp.row][tp.col] + 1:
             graph[tp].append(neighbour)
-
-# aoc.pprint(graph)
 
 start_tp = None
 trails_found_set= set()
@@ -55,8 +50,6 @@ for tp in aoc.TablePoint.iterate():
     if matrix[tp.row][tp.col] == 0:
         start_tp = tp
         find_a_nine(tp)
-
-# aoc.pprint(trails_found)
 
 print("Answer part 1 : ", len(trails_found_set))
 
