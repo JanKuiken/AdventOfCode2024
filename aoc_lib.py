@@ -3,7 +3,9 @@ Some functions that are multiple times used in AoC 2023
 """
 
 import pprint
+import itertools
 from collections import namedtuple, defaultdict
+from heapq import heapify, heappop, heappush
 
 def lines_from_file(file_name):
     """
@@ -120,6 +122,9 @@ def dijkstra(graph, source):
  
     source: https://en.wikipedia.org/wiki/Dijkstra's_algorithm
     
+    changed prev to a dict with set values to be able to backtrace all possible
+    routes with the same minimun costs
+    
  1  function Dijkstra(Graph, source):
  2     
  3      for each vertex v in Graph.Vertices:
@@ -141,11 +146,11 @@ def dijkstra(graph, source):
 19      return dist[], prev[]
 """
 
-     # pseudo code : for each vertex v in Graph.Vertices:
-     # pseudo code :     dist[v] ← INFINITY
-     # pseudo code :     prev[v] ← UNDEFINED
-     # pseudo code :     add v to Q
-     # pseudo code : dist[source] ← 0
+    # pseudo code : for each vertex v in Graph.Vertices:
+    # pseudo code :     dist[v] ← INFINITY
+    # pseudo code :     prev[v] ← UNDEFINED
+    # pseudo code :     add v to Q
+    # pseudo code : dist[source] ← 0
 
     vertices = list(graph.keys())
     
@@ -193,7 +198,118 @@ def dijkstra(graph, source):
     # pseudo code : return dist[], prev[]
     return dist, prev
 
-def test_my_dijkstra_function():
+def dijkstra_with_priority_queue(graph, source):
+    """
+    same as dijkstra, now using a priority queue    
+    using pseudo code again from: https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+    """
+    class PriorityQueue():
+        """
+        a PriorityQueue subclass, to stay as much to wikipedia's pseudocode amongs others
+        the following methods are implemented:
+            - add_with_priority 
+            - decrease_priority 
+            - and extract_min
+        
+        based on: https://docs.python.org/3/library/heapq.html#priority-queue-implementation-notes
+        (don't think we've to use count, because our vertices are unique, but copied it anyway)
+        """
+        def __init__(self):
+            self._pq = []                         # list of entries arranged in a heap
+            self._entry_finder = {}               # mapping of tasks to entries
+            self._REMOVED = '<removed-vertex>'    # placeholder for a removed task
+            self._counter = itertools.count()     # unique sequence count
+
+        def add_with_priority(self, vertex, distance):
+            'Add a new vertex or update the distance of an existing vertex'
+            if vertex in self._entry_finder:
+                self._remove_vertex(vertex)
+            count = next(self._counter)
+            entry = [distance, count, vertex]
+            self._entry_finder[vertex] = entry
+            heappush(self._pq, entry)
+
+        def _remove_vertex(self, vertex):
+            'Mark an existing task as REMOVED.  Raise KeyError if not found.'
+            entry = self._entry_finder.pop(vertex)
+            entry[-1] = self._REMOVED
+
+        def decrease_priority(self, vertex, new_distance):
+            self._remove_vertex(vertex)
+            self.add_with_priority(vertex, new_distance)
+
+        def extract_min(self):
+            'Remove and return the lowest priority task. Raise KeyError if empty.'
+            while self._pq:
+                priority, count, vertex = heappop(self._pq)
+                if vertex is not self._REMOVED:
+                    del self._entry_finder[vertex]
+                    return vertex
+            raise KeyError('pop from an empty priority queue')
+
+        def is_not_empty(self):
+            'zelf bedacht, any good...?'
+            for entry in self._pq:
+                if entry[-1] != self._REMOVED:
+                    return True
+            return False
+
+    # pseudo code : 1   function Dijkstra(Graph, source):
+    # pseudo code : 2       create vertex priority queue Q
+
+    # pseudo code : 4       dist[source] ← 0                          // Initialization
+    # pseudo code : 5       Q.add_with_priority(source, 0)            // associated priority equals dist[·]
+    # pseudo code : 6
+    # pseudo code : 7       for each vertex v in Graph.Vertices:
+    # pseudo code : 8           if v ≠ source
+    # pseudo code : 9               prev[v] ← UNDEFINED               // Predecessor of v
+    # pseudo code : 10              dist[v] ← INFINITY                // Unknown distance from source to v
+    # pseudo code : 11              Q.add_with_priority(v, INFINITY)
+
+    vertices = list(graph.keys())
+    Q = PriorityQueue()
+    prev = {}
+    dist = {}
+    for v in vertices:
+        if v == source:
+            prev[v] = set()
+            dist[v] = 0.0
+            Q.add_with_priority(v, 0.0)
+        else:
+            prev[v] = set()
+            dist[v] = float('infinity')
+            Q.add_with_priority(v, float('infinity'))
+
+    # pseudo code : 14      while Q is not empty:                     // The main loop
+    while Q.is_not_empty():
+
+        # pseudo code : 15          u ← Q.extract_min()                   // Remove and return best vertex
+        u = Q.extract_min()
+
+        # pseudo code : 16          for each neighbor v of u:             // Go through all v   neighbors of u
+        for v in graph[u].keys():
+
+            # pseudo code : 17              alt ← dist[u] + Graph.Edges(u, v)
+            # pseudo code : 18              if alt < dist[v]:
+            # pseudo code : 19                  prev[v] ← u
+            # pseudo code : 20                  dist[v] ← alt
+            # pseudo code : 21                  Q.decrease_priority(v, alt)
+
+            alt = dist[u] + graph[u][v]
+            if alt <= dist[v]:
+                if alt < dist[v]:
+                    prev[v] = set([u])
+                else:
+                    # alt == dist[v], add a prev instead of replacing it
+                    prev[v].add(u)
+                dist[v] = alt
+                Q.decrease_priority(v, alt)
+
+    # pseudo code : 23      return dist, prev
+    return dist, prev
+
+
+def test_my_dijkstra_functions():
 
     # graph also from https://en.wikipedia.org/wiki/Dijkstra's_algorithm
     graph = defaultdict(dict)
@@ -203,6 +319,13 @@ def test_my_dijkstra_function():
     graph['4'] = {'2': 15, '3': 11, '5':  6         }
     graph['5'] = {'4':  6, '6':  9                  }
     graph['6'] = {'1': 14, '3':  2, '5':  9         }
+    print('=== dijkstra test ===')
+    for start in graph.keys():
+        dist, prev = dijkstra(graph, start)
+        print('start', start)
+        print('dist', dist)
+        print('prev', prev)
+    print('=== dijkstra_with_priority_queue test ===')
     for start in graph.keys():
         dist, prev = dijkstra(graph, start)
         print('start', start)
@@ -253,6 +376,10 @@ Size of table or matrix is defined with the class variables (min/max_row/col),
     def __eq__(self, other):
         assert isinstance(other, TablePoint), 'Oops, expected a MatrixPoint'
         return self.row == other.row and self.col == other.col
+
+    def __lt__(self, other):
+        assert isinstance(other, TablePoint), 'Oops, expected a MatrixPoint'
+        return (self.row ** 2 + self.col ** 2) < (other.row ** 2 + other.col ** 2)    
 
     def __hash__(self):
         return hash((self.row, self.col))

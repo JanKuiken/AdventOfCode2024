@@ -136,7 +136,8 @@ def create_graph():
                if matrix[tp2.row][tp2.col] in '.SE':
                    dirs.append(inv_directions[tp2-tp1])
            if (   len(dirs) > 2
-               or (len(dirs) == 2 and dirs[0] + dirs[1] in possible_turns)):
+               or (len(dirs) == 2 and dirs[0] + dirs[1] in possible_turns)
+               or len(dirs) == 1):
                 
                # just add all possible turns (don't be cheap)
                add_all_possible_turns(tp1)
@@ -164,9 +165,13 @@ def print_graph():
 graph = create_graph()
 # print_graph()
 
-print('call dijkstra')
 start = Vertex(start, 'e')
-dist, prev = aoc.dijkstra(graph, start)
+
+#print('call dijkstra')
+#dist, prev = aoc.dijkstra(graph, start)
+
+print('call dijkstra_with_priority_queue')
+dist, prev = aoc.dijkstra_with_priority_queue(graph, start)
 
 ends = [Vertex(end, 'n'),
         Vertex(end, 's'),
@@ -176,7 +181,7 @@ ends = [Vertex(end, 'n'),
 for e in ends:
     print(e, dist[e])
 
-lowest_score = min([dist[e] for e in ends])
+lowest_score = int(min([dist[e] for e in ends]))
 
 print("Answer part 1 : ", lowest_score)
 
@@ -187,26 +192,21 @@ done = set()
 todo = deque([e for e in ends if dist[e]==lowest_score])
 while todo:
     vert1 = todo.popleft()
+    walked_path.add(vert1.point)
     if not vert1 in done:
         done.add(vert1)
         for vert2 in prev[vert1]:
             todo.append(vert2)
-            if vert1.point.col == vert2.point.col:
-                dist = abs(vert2.point.row - vert1.point.row)
-                if vert2.point.row < vert1.point.row:
-                    sign = -1
-                else:
-                    sign = 1
-                for i in range(0, dist+1):
-                    walked_path.add((vert1.point.row + i * sign, vert1.point.col))
-            else:
-                dist = abs(vert2.point.col - vert1.point.col)
-                if vert2.point.col < vert1.point.col:
-                    sign = -1
-                else:
-                    sign = 1
-                for i in range(0, dist+1):
-                    walked_path.add((vert1.point.row, vert1.point.col + i * sign))
+
+for vert in walked_path:
+    matrix[vert.row][vert.col] = 'O'
+aoc.print_matrix(matrix)
+
 
 print("Answer part 2 : ", len(walked_path))
+
+print("\n\nBonus : my dijkstra test function")
+aoc.test_my_dijkstra_functions()
+
+
 
