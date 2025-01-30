@@ -11,9 +11,7 @@ lines = aoc.lines_from_file("input_05.txt")
 # for testing
 # lines = aoc.lines_from_file("input_05_test.txt")
 
-
 # store the data in useful structures...
-
 rule_lines, update_lines = '\n'.join(lines).split('\n\n')
 rules = defaultdict(list)     # rules are stored default dict with empty list as default
 updates = []                  # updates are stored in a list of lists
@@ -46,13 +44,15 @@ for update in updates:
     else:
         invalid_updates.append(update)
 
-sum_of_middle_page_numbers = 0
-for update in valid_updates:
-    # check if the numbers of pages are odd
-    assert len(update) % 2 == 1, 'Oops even number of pages in valid update'
-    sum_of_middle_page_numbers += update[len(update) // 2]
+def sum_of_middle_page_numbers(updates):
+    sum = 0
+    for update in updates:
+        # check if the numbers of pages are odd
+        assert len(update) % 2 == 1, 'Oops even number of pages in valid update'
+        sum += update[len(update) // 2]
+    return sum
 
-print("Answer part 1 : ", sum_of_middle_page_numbers)
+print("Answer part 1 : ", sum_of_middle_page_numbers(valid_updates))
 
 # === Part 2
 
@@ -71,25 +71,9 @@ def comapare_pages(page_a, page_b):
     if page_a in rules.keys():
         if page_b in rules[page_a]:
             return -1
-    if page_b in rules.keys():
-        if page_a in rules[page_b]:
-            return 1
-    return 0
+    return 1
 
-corrected_invalid_updates = []
-for update in invalid_updates:
-    corrected_update = sorted(update, key=cmp_to_key(comapare_pages))
-    corrected_invalid_updates.append(corrected_update)
+corrected_invalid_updates = [ sorted(update, key=cmp_to_key(comapare_pages)) for update in invalid_updates ]
 
-# print('------')
-# for a,b in zip(invalid_updates, corrected_invalid_updates):
-#     print(a, '\n',b)
-
-sum_of_middle_page_numbers = 0
-for update in corrected_invalid_updates:
-    # check if the numbers of pages are odd
-    assert len(update) % 2 == 1, 'Oops even number of pages in valid update'
-    sum_of_middle_page_numbers += update[len(update) // 2]
-
-print("Answer part 2 : ", sum_of_middle_page_numbers)
+print("Answer part 2 : ", sum_of_middle_page_numbers(corrected_invalid_updates))
 
