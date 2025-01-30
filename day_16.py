@@ -167,8 +167,8 @@ graph = create_graph()
 
 start = Vertex(start, 'e')
 
-#print('call dijkstra')
-#dist, prev = aoc.dijkstra(graph, start)
+# print('call dijkstra')
+# dist, prev = aoc.dijkstra(graph, start)
 
 print('call dijkstra_with_priority_queue')
 dist, prev = aoc.dijkstra_with_priority_queue(graph, start)
@@ -198,15 +198,14 @@ while todo:
         for vert2 in prev[vert1]:
             todo.append(vert2)
 
-for vert in walked_path:
-    matrix[vert.row][vert.col] = 'O'
-aoc.print_matrix(matrix)
-
+# for vert in walked_path:
+#     matrix[vert.row][vert.col] = 'O'
+# aoc.print_matrix(matrix)
 
 print("Answer part 2 : ", len(walked_path))
 
-print("\n\nBonus : my dijkstra test function")
-aoc.test_my_dijkstra_functions()
+# print("\n\nBonus : my dijkstra test function")
+# aoc.test_my_dijkstra_functions()
 
 
 

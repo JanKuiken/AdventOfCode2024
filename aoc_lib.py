@@ -125,32 +125,26 @@ def dijkstra(graph, source):
     changed prev to a dict with set values to be able to backtrace all possible
     routes with the same minimun costs
     
- 1  function Dijkstra(Graph, source):
- 2     
- 3      for each vertex v in Graph.Vertices:
- 4          dist[v] ← INFINITY
- 5          prev[v] ← UNDEFINED
- 6          add v to Q
- 7      dist[source] ← 0
- 8     
- 9      while Q is not empty:
-10          u ← vertex in Q with minimum dist[u]
-11          remove u from Q
-12         
-13          for each neighbor v of u still in Q:
-14              alt ← dist[u] + Graph.Edges(u, v)
-15              if alt < dist[v]:
-16                  dist[v] ← alt
-17                  prev[v] ← u
-18
-19      return dist[], prev[]
+     1  function Dijkstra(Graph, source):
+     2     
+     3      for each vertex v in Graph.Vertices:
+     4          dist[v] ← INFINITY
+     5          prev[v] ← UNDEFINED
+     6          add v to Q
+     7      dist[source] ← 0
+     8     
+     9      while Q is not empty:
+    10          u ← vertex in Q with minimum dist[u]
+    11          remove u from Q
+    12         
+    13          for each neighbor v of u still in Q:
+    14              alt ← dist[u] + Graph.Edges(u, v)
+    15              if alt < dist[v]:
+    16                  dist[v] ← alt
+    17                  prev[v] ← u
+    18
+    19      return dist[], prev[]
 """
-
-    # pseudo code : for each vertex v in Graph.Vertices:
-    # pseudo code :     dist[v] ← INFINITY
-    # pseudo code :     prev[v] ← UNDEFINED
-    # pseudo code :     add v to Q
-    # pseudo code : dist[source] ← 0
 
     vertices = list(graph.keys())
     
@@ -160,48 +154,58 @@ def dijkstra(graph, source):
 
     dist[source] = 0
     
-    # pseudo code : while Q is not empty
-
     while Q:
     
-        # pseudo code : u ← vertex in Q with minimum dist[u]
         min_dist = float('infinity')
         u = None
         for v in Q:
             if dist[v] <= min_dist:
                 min_dist = dist[v]
                 u = v
-
-        # pseudo code : remove u from Q
         Q.remove(u)
         
-        # pseudo code : for each neighbor v of u still in Q:
-
         neighbours_of_u = graph[u].keys()
         neighbours_of_u_in_Q = [neighbour for neighbour in neighbours_of_u if neighbour in Q]
         for v in neighbours_of_u_in_Q:
-
-            # pseudo code : alt ← dist[u] + Graph.Edges(u, v)
-            # pseudo code : if alt < dist[v]:
-            # pseudo code :     dist[v] ← alt
-            # pseudo code :     prev[v] ← u
 
             alt = dist[u] + graph[u][v]
             if alt <= dist[v]:
                 if alt < dist[v]:
                     prev[v] = set([u])
                 else:
-                    # alt == dist[v], add a prev instead of replacing it
                     prev[v].add(u)
                 dist[v] = alt
         
-    # pseudo code : return dist[], prev[]
     return dist, prev
 
 def dijkstra_with_priority_queue(graph, source):
     """
     same as dijkstra, now using a priority queue    
     using pseudo code again from: https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+
+    1   function Dijkstra(Graph, source):
+    2       create vertex priority queue Q
+    3
+    4       dist[source] ← 0                          // Initialization
+    5       Q.add_with_priority(source, 0)            // associated priority equals dist[·]
+    6
+    7       for each vertex v in Graph.Vertices:
+    8           if v ≠ source
+    9               prev[v] ← UNDEFINED               // Predecessor of v
+    10              dist[v] ← INFINITY                // Unknown distance from source to v
+    11              Q.add_with_priority(v, INFINITY)
+    12
+    13
+    14      while Q is not empty:                     // The main loop
+    15          u ← Q.extract_min()                   // Remove and return best vertex
+    16          for each neighbor v of u:             // Go through all v neighbors of u
+    17              alt ← dist[u] + Graph.Edges(u, v)
+    18              if alt < dist[v]:
+    19                  prev[v] ← u
+    20                  dist[v] ← alt
+    21                  Q.decrease_priority(v, alt)
+    22
+    23      return dist, prev
     """
     class PriorityQueue():
         """
@@ -209,7 +213,7 @@ def dijkstra_with_priority_queue(graph, source):
         the following methods are implemented:
             - add_with_priority 
             - decrease_priority 
-            - and extract_min
+            - extract_min
         
         based on: https://docs.python.org/3/library/heapq.html#priority-queue-implementation-notes
         (don't think we've to use count, because our vertices are unique, but copied it anyway)
@@ -254,17 +258,6 @@ def dijkstra_with_priority_queue(graph, source):
                     return True
             return False
 
-    # pseudo code : 1   function Dijkstra(Graph, source):
-    # pseudo code : 2       create vertex priority queue Q
-
-    # pseudo code : 4       dist[source] ← 0                          // Initialization
-    # pseudo code : 5       Q.add_with_priority(source, 0)            // associated priority equals dist[·]
-    # pseudo code : 6
-    # pseudo code : 7       for each vertex v in Graph.Vertices:
-    # pseudo code : 8           if v ≠ source
-    # pseudo code : 9               prev[v] ← UNDEFINED               // Predecessor of v
-    # pseudo code : 10              dist[v] ← INFINITY                // Unknown distance from source to v
-    # pseudo code : 11              Q.add_with_priority(v, INFINITY)
 
     vertices = list(graph.keys())
     Q = PriorityQueue()
@@ -280,32 +273,21 @@ def dijkstra_with_priority_queue(graph, source):
             dist[v] = float('infinity')
             Q.add_with_priority(v, float('infinity'))
 
-    # pseudo code : 14      while Q is not empty:                     // The main loop
     while Q.is_not_empty():
 
-        # pseudo code : 15          u ← Q.extract_min()                   // Remove and return best vertex
         u = Q.extract_min()
 
-        # pseudo code : 16          for each neighbor v of u:             // Go through all v   neighbors of u
         for v in graph[u].keys():
-
-            # pseudo code : 17              alt ← dist[u] + Graph.Edges(u, v)
-            # pseudo code : 18              if alt < dist[v]:
-            # pseudo code : 19                  prev[v] ← u
-            # pseudo code : 20                  dist[v] ← alt
-            # pseudo code : 21                  Q.decrease_priority(v, alt)
 
             alt = dist[u] + graph[u][v]
             if alt <= dist[v]:
                 if alt < dist[v]:
                     prev[v] = set([u])
                 else:
-                    # alt == dist[v], add a prev instead of replacing it
                     prev[v].add(u)
                 dist[v] = alt
                 Q.decrease_priority(v, alt)
 
-    # pseudo code : 23      return dist, prev
     return dist, prev
 
 
@@ -331,6 +313,7 @@ def test_my_dijkstra_functions():
         print('start', start)
         print('dist', dist)
         print('prev', prev)
+
 
 class TablePoint:
     """ A minimal class with row,col integers for indexing a table or matrix.
