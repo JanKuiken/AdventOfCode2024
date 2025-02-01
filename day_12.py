@@ -37,16 +37,14 @@ for row in range(n_rows) : fences[aoc.TablePoint(row,0)]        += 'w'
 for row in range(n_rows) : fences[aoc.TablePoint(row,n_cols-1)] += 'e'
 
 # set up fences between different gardens for each table cell
-for row in range(n_rows):
-    for col in range(n_cols):
-        tp = aoc.TablePoint(row,col)
-        for neighbour in tp.cartesian_neighbours():
-            if matrix[neighbour.row][neighbour.col] != matrix[tp.row][tp.col]:
-                delta = neighbour - tp
-                if delta.row == -1 : fences[tp] += 'n'
-                if delta.row ==  1 : fences[tp] += 's'
-                if delta.col == -1 : fences[tp] += 'w'
-                if delta.col ==  1 : fences[tp] += 'e'
+for tp in aoc.TablePoint.iterate():
+    for neighbour in tp.cartesian_neighbours():
+        if matrix[neighbour.row][neighbour.col] != matrix[tp.row][tp.col]:
+            delta = neighbour - tp
+            if delta.row == -1 : fences[tp] += 'n'
+            if delta.row ==  1 : fences[tp] += 's'
+            if delta.col == -1 : fences[tp] += 'w'
+            if delta.col ==  1 : fences[tp] += 'e'
 
 # recursive function to find all cells of a garden. Returns a set of table cells
 # First parameter is a TablePoint, second must be an empty set
@@ -62,33 +60,31 @@ def find_whole_garden(tp, areas):
 total_price = 0
 total_price_part_2 = 0
 been_there_done_that = set()
-for row in range(n_rows):
-    for col in range(n_cols):
-        tp = aoc.TablePoint(row,col)
-        if tp not in been_there_done_that:
+for tp in aoc.TablePoint.iterate():
+    if tp not in been_there_done_that:
+    
+        garden = find_whole_garden(tp, set())
+        been_there_done_that.update(garden)
+
+        # for part 1            
+        n_fences = sum([len(fences[tp2]) for tp2 in garden])
+        price = len(garden) * n_fences
+        total_price += price            
+
+        # for part 2
+        double_count = 0
+        for tp2 in garden:
+            for neighbour in tp2.cartesian_neighbours():
+                if neighbour in garden:
+                    if 's' in fences[neighbour] and 's' in fences[tp2] : double_count += 1
+                    if 'n' in fences[neighbour] and 'n' in fences[tp2] : double_count += 1
+                    if 'e' in fences[neighbour] and 'e' in fences[tp2] : double_count += 1
+                    if 'w' in fences[neighbour] and 'w' in fences[tp2] : double_count += 1
+        number_of_sides = n_fences - double_count // 2
+        reduced_price = len(garden) * number_of_sides
+        total_price_part_2 += reduced_price
         
-            garden = find_whole_garden(tp, set())
-            been_there_done_that.update(garden)
-
-            # for part 1            
-            n_fences = sum([len(fences[tp2]) for tp2 in garden])
-            price = len(garden) * n_fences
-            total_price += price            
-
-            # for part 2
-            double_count = 0
-            for tp2 in garden:
-                for neighbour in tp2.cartesian_neighbours():
-                    if neighbour in garden:
-                        if 's' in fences[neighbour] and 's' in fences[tp2] : double_count += 1
-                        if 'n' in fences[neighbour] and 'n' in fences[tp2] : double_count += 1
-                        if 'e' in fences[neighbour] and 'e' in fences[tp2] : double_count += 1
-                        if 'w' in fences[neighbour] and 'w' in fences[tp2] : double_count += 1
-            number_of_sides = n_fences - double_count // 2
-            reduced_price = len(garden) * number_of_sides
-            total_price_part_2 += reduced_price
-            
-            #print(tp, matrix[tp.row][tp.col], len(garden), n_fences, price, reduced_price)
+        #print(tp, matrix[tp.row][tp.col], len(garden), n_fences, price, reduced_price)
            
 print("Answer part 1 : ", total_price)
 
