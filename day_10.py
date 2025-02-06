@@ -34,7 +34,7 @@ for tp in aoc.TablePoint.iterate():
         if matrix[neighbour.row][neighbour.col] == matrix[tp.row][tp.col] + 1:
             graph[tp].append(neighbour)
 
-# my clobal variables (besides graph)
+# my global variables (besides graph)
 start_tp = None
 trails_found_set= set()
 trails_found_list= list()
@@ -51,6 +51,8 @@ for tp in aoc.TablePoint.iterate():
     if matrix[tp.row][tp.col] == 0:
         start_tp = tp
         find_a_nine(tp)
+
+aoc.print_matrix(matrix)
 
 print("Answer part 1 : ", len(trails_found_set))
 
